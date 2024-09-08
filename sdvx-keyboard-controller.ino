@@ -66,14 +66,10 @@ void setup() {
     pinMode(PIN_BT_START, INPUT_PULLUP);
 
     // enc interrupts
-    attachInterrupt(digitalPinToInterrupt(PIN_VOL_L_A), updateEncStateL,
-        CHANGE);
-    attachInterrupt(digitalPinToInterrupt(PIN_VOL_L_B), updateEncStateL,
-        CHANGE);
-    attachInterrupt(digitalPinToInterrupt(PIN_VOL_R_A), updateEncStateR,
-        CHANGE);
-    attachInterrupt(digitalPinToInterrupt(PIN_VOL_R_B), updateEncStateR,
-        CHANGE);
+    attachInterrupt(digitalPinToInterrupt(PIN_VOL_L_A), updateEncStateL, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(PIN_VOL_L_B), updateEncStateL, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(PIN_VOL_R_A), updateEncStateR, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(PIN_VOL_R_B), updateEncStateR, CHANGE);
 
     // use as keyboard
     Keyboard.begin();
