@@ -29,7 +29,7 @@ const uint8_t PIN_BT_START = 10; // START 10,  D10
 
 // usability settings
 const uint8_t KEY_DELAY = 2;           // determine the delay between keyinputs
-const uint8_t VOL_RELEASE_DELAY = 10;  // determine sensitivity of the encoder
+const uint8_t VOL_RELEASE_DELAY = 20;  // determine sensitivity of the encoder
 
 // encoder data
 volatile uint8_t encCurrentL;
