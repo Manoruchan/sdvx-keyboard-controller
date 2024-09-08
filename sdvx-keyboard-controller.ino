@@ -29,7 +29,7 @@ const uint8_t PIN_BT_START = 10; // START 10,  D10
 
 // usability settings
 const uint8_t KEY_DELAY = 2;           // determine the delay between keyinputs
-const uint8_t VOL_RELEASE_DELAY = 20;  // determine sensitivity of the encoder
+const uint8_t VOL_RELEASE_DELAY = 15;  // determine sensitivity of the encoder
 
 // encoder data
 volatile uint8_t encCurrentL;
@@ -169,7 +169,7 @@ void updateEncStateL() {
 
     encCurrentL = (pinA << 1) | pinB;
 
-    if (!(encCurrentL == encPreviousL)) {
+    if (encCurrentL != encPreviousL) {
         uint8_t encState = encPastL << 4 | encPreviousL << 2 | encCurrentL;
 
         // if clockwise
@@ -196,7 +196,7 @@ void updateEncStateR() {
 
     encCurrentR = (pinA << 1) | pinB;
 
-    if (!(encCurrentR == encPreviousR)) {
+    if (encCurrentR != encPreviousR) {
         uint8_t encState = encPastR << 4 | encPreviousR << 2 | encCurrentR;
 
         // if clockwise
