@@ -5,7 +5,7 @@ SOUND VOLTEX keyboard-controller for Pro Micro
 pro micro向けのsdvx controllerのsketchです。
 
 ## Usage
-33行目のVOL_RELEASE_DELAYからつまみ感度を調整できます。
+33行目のVOL_DELAYからつまみ感度を調整できます。
 
 ## Note
 つまみの誤入力がひどかったので、つまみの精度を上げたコードを移植して解決しました。
