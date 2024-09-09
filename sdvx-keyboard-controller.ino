@@ -28,8 +28,9 @@ const uint8_t PIN_BT_START = 10; // START 10,  D10
 #define BT_START KEY_RETURN
 
 // usability settings
-const uint8_t KEY_DELAY = 2;           // determine the delay between keyinputs
-const uint8_t VOL_RELEASE_DELAY = 15;  // determine sensitivity of the encoder
+const uint8_t KEY_DELAY = 2;         // determine the delay between keyinputs
+const uint8_t VOL_RELEASE_DELAY = 5;
+const uint8_t VOL_DELAY = 15;        // determine sensitivity of the encoder
 
 // encoder data
 volatile uint8_t encCurrentL;
@@ -77,89 +78,100 @@ void setup() {
 
 
 void loop() {
-    // button
-    if (digitalRead(PIN_BT_A) == LOW) {
-        Keyboard.press(BT_A);
-        delay(KEY_DELAY);
-    } else if (digitalRead(PIN_BT_A) == HIGH) {
-        Keyboard.release(BT_A);
-    }
+	// button
+	if (digitalRead(PIN_BT_A) == LOW) {
+		Keyboard.press(BT_A);
+		delay(KEY_DELAY);
+	}
+	else if (digitalRead(PIN_BT_A) == HIGH) {
+		Keyboard.release(BT_A);
+	}
 
-    if (digitalRead(PIN_BT_B) == LOW) {
-        Keyboard.press(BT_B);
-        delay(KEY_DELAY);
-    } else if (digitalRead(PIN_BT_B) == HIGH) {
-        Keyboard.release(BT_B);
-    }
+	if (digitalRead(PIN_BT_B) == LOW) {
+		Keyboard.press(BT_B);
+		delay(KEY_DELAY);
+	}
+	else if (digitalRead(PIN_BT_B) == HIGH) {
+		Keyboard.release(BT_B);
+	}
 
-    if (digitalRead(PIN_BT_C) == LOW) {
-        Keyboard.press(BT_C);
-        delay(KEY_DELAY);
-    } else if (digitalRead(PIN_BT_C) == HIGH) {
-        Keyboard.release(BT_C);
-    }
+	if (digitalRead(PIN_BT_C) == LOW) {
+		Keyboard.press(BT_C);
+		delay(KEY_DELAY);
+	}
+	else if (digitalRead(PIN_BT_C) == HIGH) {
+		Keyboard.release(BT_C);
+	}
 
-    if (digitalRead(PIN_BT_D) == LOW) {
-        Keyboard.press(BT_D);
-        delay(KEY_DELAY);
-    } else if (digitalRead(PIN_BT_D) == HIGH) {
-        Keyboard.release(BT_D);
-    }
+	if (digitalRead(PIN_BT_D) == LOW) {
+		Keyboard.press(BT_D);
+		delay(KEY_DELAY);
+	}
+	else if (digitalRead(PIN_BT_D) == HIGH) {
+		Keyboard.release(BT_D);
+	}
 
-    if (digitalRead(PIN_FX_L) == LOW) {
-        Keyboard.press(FX_L);
-        delay(KEY_DELAY);
-    } else if (digitalRead(PIN_FX_L) == HIGH) {
-        Keyboard.release(FX_L);
-    }
+	if (digitalRead(PIN_FX_L) == LOW) {
+		Keyboard.press(FX_L);
+		delay(KEY_DELAY);
+	}
+	else if (digitalRead(PIN_FX_L) == HIGH) {
+		Keyboard.release(FX_L);
+	}
 
-    if (digitalRead(PIN_FX_R) == LOW) {
-        Keyboard.press(FX_R);
-        delay(KEY_DELAY);
-    } else if (digitalRead(PIN_FX_R) == HIGH) {
-        Keyboard.release(FX_R);
-    }
+	if (digitalRead(PIN_FX_R) == LOW) {
+		Keyboard.press(FX_R);
+		delay(KEY_DELAY);
+	}
+	else if (digitalRead(PIN_FX_R) == HIGH) {
+		Keyboard.release(FX_R);
+	}
 
-    if (digitalRead(PIN_BT_START) == LOW) {
-        Keyboard.press(KEY_RETURN);
-    } else if (digitalRead(PIN_BT_START) == HIGH) {
-        Keyboard.release(KEY_RETURN);
-    }
+	if (digitalRead(PIN_BT_START) == LOW) {
+		Keyboard.press(KEY_RETURN);
+	}
+	else if (digitalRead(PIN_BT_START) == HIGH) {
+		Keyboard.release(KEY_RETURN);
+	}
 
-    // convert enc input to keyboard input
-    // clockwise
-    if (encStateL > 0) {
-        Keyboard.release(VOL_L_CCW);
-        Keyboard.press(VOL_L_CW);
-        delay(VOL_RELEASE_DELAY);
-        Keyboard.release(VOL_L_CW);
-        encStateL--;
-    }
-    // counterclockwise
-    if (encStateL < 0) {
-        Keyboard.release(VOL_L_CW);
-        Keyboard.press(VOL_L_CCW);
-        delay(VOL_RELEASE_DELAY);
-        Keyboard.release(VOL_L_CCW);
-        encStateL++;
-    }
+	// convert enc input to keyboard input
+	// clockwise
+	if (encStateL > 0) {
+		Keyboard.release(VOL_L_CCW);
+		Keyboard.press(VOL_L_CW);
+		delay(VOL_RELEASE_DELAY);
+		Keyboard.release(VOL_L_CW);
+		encStateL--;
+		delay(VOL_DELAY);
+	}
+	// counterclockwise
+	if (encStateL < 0) {
+		Keyboard.release(VOL_L_CW);
+		Keyboard.press(VOL_L_CCW);
+		delay(VOL_RELEASE_DELAY);
+		Keyboard.release(VOL_L_CCW);
+		encStateL++;
+		delay(VOL_DELAY);
+	}
 
-    // clockwise
-    if (encStateR > 0) {
-        Keyboard.release(VOL_R_CCW);
-        Keyboard.press(VOL_R_CW);
-        delay(VOL_RELEASE_DELAY);
-        Keyboard.release(VOL_R_CW);
+	// clockwise
+	if (encStateR > 0) {
+		Keyboard.release(VOL_R_CCW);
+		Keyboard.press(VOL_R_CW);
+		delay(VOL_RELEASE_DELAY);
+		Keyboard.release(VOL_R_CW);
         encStateR--;
-    }
-    // counterclockwise
-    if (encStateR < 0) {
-        Keyboard.release(VOL_R_CW);
-        Keyboard.press(VOL_R_CCW);
-        delay(VOL_RELEASE_DELAY);
-        Keyboard.release(VOL_R_CCW);
+		delay(VOL_DELAY);
+	}
+	// counterclockwise
+	if (encStateR < 0) {
+		Keyboard.release(VOL_R_CW);
+		Keyboard.press(VOL_R_CCW);
+		delay(VOL_RELEASE_DELAY);
+		Keyboard.release(VOL_R_CCW);
         encStateR++;
-    }
+		delay(VOL_DELAY);
+	}
 }
 
 
@@ -169,20 +181,20 @@ void updateEncStateL() {
 
     encCurrentL = (pinA << 1) | pinB;
 
-    if (encCurrentL != encPreviousL) {
+    if(encCurrentL != encPreviousL) {
         uint8_t encState = encPastL << 4 | encPreviousL << 2 | encCurrentL;
 
         // if clockwise
-        if (encState == 0b111000) {
+        if(encState == 0b111000) {
             if (encStateL != 1) {
-                encStateL++;
-            }
+				encStateL++;
+			}
         }
         // if conterclockwise
-        else if (encState == 0b001011) {
+        else if(encState == 0b001011) {
             if (encStateL != -1) {
-                encStateL--;
-            }
+				encStateL--;
+			}
         }
 
         encPastL = encPreviousL;
@@ -196,20 +208,20 @@ void updateEncStateR() {
 
     encCurrentR = (pinA << 1) | pinB;
 
-    if (encCurrentR != encPreviousR) {
+    if(encCurrentR != encPreviousR) {
         uint8_t encState = encPastR << 4 | encPreviousR << 2 | encCurrentR;
 
         // if clockwise
-        if (encState == 0b111000) {
-            if (encStateR != 1) {
-                encStateR++;
-            }
+        if(encState == 0b111000) {
+			if (encStateR != 1) {
+				encStateR++;
+			}
         }
         // if conterclockwise
-        else if (encState == 0b001011) {
+        else if(encState == 0b001011) {
             if (encStateR != -1) {
-                encStateR--;
-            }
+				encStateR--;
+			}
         }
 
         encPastR = encPreviousR;
