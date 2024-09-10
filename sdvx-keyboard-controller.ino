@@ -41,9 +41,9 @@ volatile uint8_t encCurrentR;
 volatile uint8_t encPreviousR;
 volatile uint8_t encPastR;
 
-// counterclockwise [-128, 0)
+// counterclockwise -1
 // nothing          0
-// clockwise        (0, 127]
+// clockwise        1
 volatile int8_t encStateL = 0;
 volatile int8_t encStateR = 0;
 
@@ -137,7 +137,6 @@ void loop() {
 	// convert enc input to keyboard input
 	// clockwise
 	if (encStateL > 0) {
-		Keyboard.release(VOL_L_CCW);
 		Keyboard.press(VOL_L_CW);
 		delay(VOL_RELEASE_DELAY);
 		Keyboard.release(VOL_L_CW);
@@ -146,7 +145,6 @@ void loop() {
 	}
 	// counterclockwise
 	if (encStateL < 0) {
-		Keyboard.release(VOL_L_CW);
 		Keyboard.press(VOL_L_CCW);
 		delay(VOL_RELEASE_DELAY);
 		Keyboard.release(VOL_L_CCW);
@@ -156,7 +154,6 @@ void loop() {
 
 	// clockwise
 	if (encStateR > 0) {
-		Keyboard.release(VOL_R_CCW);
 		Keyboard.press(VOL_R_CW);
 		delay(VOL_RELEASE_DELAY);
 		Keyboard.release(VOL_R_CW);
@@ -165,7 +162,6 @@ void loop() {
 	}
 	// counterclockwise
 	if (encStateR < 0) {
-		Keyboard.release(VOL_R_CW);
 		Keyboard.press(VOL_R_CCW);
 		delay(VOL_RELEASE_DELAY);
 		Keyboard.release(VOL_R_CCW);
