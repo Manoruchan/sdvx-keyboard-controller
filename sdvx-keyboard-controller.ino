@@ -29,8 +29,7 @@ const uint8_t PIN_BT_START = 10; // START 10,  D10
 
 // usability settings
 const uint8_t KEY_DELAY = 2;         // determine the delay between keyinputs
-const uint8_t VOL_RELEASE_DELAY = 5;
-const uint8_t VOL_DELAY = 15;        // determine sensitivity of the encoder
+const uint8_t VOL_RELEASE_DELAY = 1;
 
 // encoder data
 volatile uint8_t encCurrentL;
@@ -134,7 +133,6 @@ void loop() {
     delay(VOL_RELEASE_DELAY);
     Keyboard.release(VOL_L_CW);
     encStateL--;
-    delay(VOL_DELAY);
   }
   // counterclockwise
   if (encStateL < 0) {
@@ -142,7 +140,6 @@ void loop() {
     delay(VOL_RELEASE_DELAY);
     Keyboard.release(VOL_L_CCW);
     encStateL++;
-    delay(VOL_DELAY);
   }
   // clockwise
   if (encStateR > 0) {
@@ -150,7 +147,6 @@ void loop() {
     delay(VOL_RELEASE_DELAY);
     Keyboard.release(VOL_R_CW);
     encStateR--;
-    delay(VOL_DELAY);
   }
   // counterclockwise
   if (encStateR < 0) {
@@ -158,7 +154,6 @@ void loop() {
     delay(VOL_RELEASE_DELAY);
     Keyboard.release(VOL_R_CCW);
     encStateR++;
-    delay(VOL_DELAY);
   }
 }
 
