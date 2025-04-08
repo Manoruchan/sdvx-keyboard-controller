@@ -7,9 +7,6 @@ pro micro向けのsdvx controllerのsketchです。
 ## Usage
 コードの上の方に設定がいろいろ集まっているので適当に変更してください。
 
-## Note
-つまみの誤入力がひどかったので、つまみの精度を上げたコードを移植して解決しました。
-
 ## Reference
 - [Sketch of SDVX controller for Pro Micro](https://github.com/sugattor/pro-micro-sdvx)
 - [改・Arduinoでのロータリーエンコーダーの使い方](https://tsuzureya.net/how-to-use-rotary-encoder-with-arduino-revised/)
