@@ -28,8 +28,7 @@ const uint8_t PIN_BT_START = 10; // START 10,  D10
 #define BT_START KEY_RETURN
 
 // usability settings
-const uint8_t KEY_DELAY = 2;         // determine the delay between keyinputs
-const uint8_t VOL_RELEASE_DELAY = 1;
+const uint8_t VOL_TIMEOUT = 10;
 
 // encoder data
 volatile uint8_t encCurrentL;
@@ -40,11 +39,18 @@ volatile uint8_t encCurrentR;
 volatile uint8_t encPreviousR;
 volatile uint8_t encPastR;
 
+
 // counterclockwise -1
 // nothing          0
 // clockwise        1
 volatile int8_t encStateL = 0;
 volatile int8_t encStateR = 0;
+
+volatile int8_t encTimeoutCountL = 0;
+volatile int8_t encTimeoutCountR = 0;
+
+volatile bool encWaitForEncInputL = false;
+volatile bool encWaitForEncInputR = false;
 
 
 void setup() {
@@ -77,45 +83,45 @@ void setup() {
 
 
 void loop() {
-  // button
+  onButton();
+  onEncoderL();
+  onEncoderR();
+  delay(1);
+}
+
+void onButton() {
   if (digitalRead(PIN_BT_A) == LOW) {
     Keyboard.press(BT_A);
-    delay(KEY_DELAY);
   } else if (digitalRead(PIN_BT_A) == HIGH) {
     Keyboard.release(BT_A);
   }
 
   if (digitalRead(PIN_BT_B) == LOW) {
     Keyboard.press(BT_B);
-    delay(KEY_DELAY);
   } else if (digitalRead(PIN_BT_B) == HIGH) {
     Keyboard.release(BT_B);
   }
 
   if (digitalRead(PIN_BT_C) == LOW) {
     Keyboard.press(BT_C);
-    delay(KEY_DELAY);
   } else if (digitalRead(PIN_BT_C) == HIGH) {
     Keyboard.release(BT_C);
   }
 
   if (digitalRead(PIN_BT_D) == LOW) {
     Keyboard.press(BT_D);
-    delay(KEY_DELAY);
   } else if (digitalRead(PIN_BT_D) == HIGH) {
     Keyboard.release(BT_D);
   }
 
   if (digitalRead(PIN_FX_L) == LOW) {
     Keyboard.press(FX_L);
-    delay(KEY_DELAY);
   } else if (digitalRead(PIN_FX_L) == HIGH) {
     Keyboard.release(FX_L);
   }
 
   if (digitalRead(PIN_FX_R) == LOW) {
     Keyboard.press(FX_R);
-    delay(KEY_DELAY);
   } else if (digitalRead(PIN_FX_R) == HIGH) {
     Keyboard.release(FX_R);
   }
@@ -125,35 +131,76 @@ void loop() {
   } else if (digitalRead(PIN_BT_START) == HIGH) {
     Keyboard.release(KEY_RETURN);
   }
+}
 
-  // convert enc input to keyboard input
+// convert enc input to keyboard input
+void onEncoderL() {
   // clockwise
   if (encStateL > 0) {
+    if (encWaitForEncInputL == false) {
+      encWaitForEncInputL = true;
+    }
+    encTimeoutCountL = 0;
+    Keyboard.release(VOL_L_CCW);
     Keyboard.press(VOL_L_CW);
-    delay(VOL_RELEASE_DELAY);
-    Keyboard.release(VOL_L_CW);
     encStateL--;
   }
   // counterclockwise
   if (encStateL < 0) {
+    if (encWaitForEncInputL == false) {
+      encWaitForEncInputL = true;
+    }
+    encTimeoutCountL = 0;
+    Keyboard.release(VOL_L_CW);
     Keyboard.press(VOL_L_CCW);
-    delay(VOL_RELEASE_DELAY);
-    Keyboard.release(VOL_L_CCW);
     encStateL++;
   }
+
+  if (encStateL == 0) {
+    if (encWaitForEncInputL == true) {
+      encTimeoutCountL++;
+    }
+  }
+
+  if (encTimeoutCountL == VOL_TIMEOUT) {
+    encWaitForEncInputL = false;
+    Keyboard.release(VOL_L_CW);
+    Keyboard.release(VOL_L_CCW);
+  }
+}
+
+void onEncoderR() {
   // clockwise
   if (encStateR > 0) {
+    if (encWaitForEncInputR == false) {
+      encWaitForEncInputR = true;
+    }
+    encTimeoutCountR = 0;
+    Keyboard.release(VOL_R_CCW);
     Keyboard.press(VOL_R_CW);
-    delay(VOL_RELEASE_DELAY);
-    Keyboard.release(VOL_R_CW);
     encStateR--;
   }
   // counterclockwise
   if (encStateR < 0) {
+    if (encWaitForEncInputR == false) {
+      encWaitForEncInputR = true;
+    }
+    encTimeoutCountR = 0;
+    Keyboard.release(VOL_R_CW);
     Keyboard.press(VOL_R_CCW);
-    delay(VOL_RELEASE_DELAY);
-    Keyboard.release(VOL_R_CCW);
     encStateR++;
+  }
+
+  if (encStateR == 0) {
+    if (encWaitForEncInputR == true) {
+      encTimeoutCountR++;
+    }
+  }
+
+  if (encTimeoutCountR == VOL_TIMEOUT) {
+    encWaitForEncInputR = false;
+    Keyboard.release(VOL_R_CW);
+    Keyboard.release(VOL_R_CCW);
   }
 }
 
@@ -174,7 +221,7 @@ void updateEncStateL() {
       }
     }
     // if conterclockwise
-    else if (encState == 0b001011) {
+    if (encState == 0b110100) {
       if (encStateL != -1) {
         encStateL--;
       }
@@ -201,7 +248,7 @@ void updateEncStateR() {
       }
     }
     // if conterclockwise
-    else if (encState == 0b001011) {
+    if (encState == 0b110100) {
       if (encStateR != -1) {
         encStateR--;
       }
